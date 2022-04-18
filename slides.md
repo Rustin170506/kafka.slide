@@ -5,7 +5,7 @@ class: 'text-center'
 highlighter: shiki
 lineNumbers: false
 info: |
-  Kafka.
+  Kafka: a Distributed Messaging System and an ACID database.
 
   Learn more at [Kafka](https://kafka.apache.org/)
 drawings:
