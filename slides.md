@@ -5,14 +5,14 @@ class: 'text-center'
 highlighter: shiki
 lineNumbers: false
 info: |
-  Kafka: a Distributed Messaging System and an ACID database.
+  Kafka: a Distributed Messaging System and an ACID Database.
 
   Learn more at [Kafka](https://kafka.apache.org/)
 drawings:
   persist: false
 ---
 
-# Kafka: a Distributed Messaging System and an ACID database
+# Kafka: a Distributed Messaging System and an ACID Database
 
 [hi-rustin](https://github.com/hi-rustin)
 
