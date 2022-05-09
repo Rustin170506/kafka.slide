@@ -5,14 +5,14 @@ class: 'text-center'
 highlighter: shiki
 lineNumbers: false
 info: |
-  Kafka: a Distributed Messaging System and an ACID Database.
+  Kafka: a Distributed Messaging System.
 
   Learn more at [Kafka](https://kafka.apache.org/)
 drawings:
   persist: false
 ---
 
-# Kafka: a Distributed Messaging System and an ACID Database
+# Kafka: a Distributed Messaging System
 
 [hi-rustin](https://github.com/hi-rustin)
 
@@ -32,15 +32,9 @@ layout: center
 
 <br/>
 
-# Kafka is an ACID Database
-#### Atomicity
-#### Consistency
-#### Isolation
-#### Durability
-
-<br/>
-
 # TiCDC Writes To Kafka
+#### max.message.bytes
+#### min.insync.replicas
 
 --- 
 
@@ -162,3 +156,62 @@ h1 {
   text-orientation: mixed;
 }
 </style>
+
+---
+
+# Design
+## Kafka Log
+
+```shell
+# Topic ticdc-test-0
+.
+├── 00000000000000000000.index # Data offset index
+├── 00000000000000000000.log # Data log
+├── 00000000000000000000.timeindex # Data timestamp index
+├── 00000000000000000001.index
+├── 00000000000000000001.log
+├── 00000000000000000001.snapshot
+├── 00000000000000000001.timeindex
+├── 00000000000000000002.index
+├── 00000000000000000002.log
+├── 00000000000000000002.snapshot
+├── 00000000000000000002.timeindex
+├── 00000000000000000003.index
+├── 00000000000000000003.log
+├── 00000000000000000003.snapshot
+└── 00000000000000000003.timeindex
+```
+
+---
+
+# Data Log
+##### Command
+```c
+kafka-run-class.sh kafka.tools.DumpLogSegments --deep-iteration --print-data-log --files /kafka/kafka-logs-a3a9cc22d5ef/ticdc-test-0/00000000000000000000.log
+```
+##### Data
+```shell
+Dumping /kafka/kafka-logs-a3a9cc22d5ef/ticdc-test-0/00000000000000000000.log
+Starting offset: 0
+baseOffset: 0 lastOffset: 0 count: 1 baseSequence: 0 lastSequence: 0 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 0 isTransactional: false isControl: false position: 0 CreateTime: 1652109690071 size: 473 magic: 2 compresscodec: NONE crc: 1685351341 isvalid: true
+| offset: 0 isValid: true crc: null keySize: -1 valueSize: 403 CreateTime: 1652109690071 baseOffset: 0 lastOffset: 0 baseSequence: 0 lastSequence: 0 producerEpoch: -1 partitionLeaderEpoch: 0 batchSize: 473 magic: 2 compressType: NONE position: 0 sequence: 0 headerKeys: [] payload: {"id":0,"database":"test","table":"sbtest5","pkNames":null,"isDdl":true,"type":"CREATE","es":1652109688508,"ts":1652109690071,"sql":"CREATE TABLE `sbtest5` (`id` INT NOT NULL AUTO_INCREMENT,`k` INT DEFAULT _UTF8MB4'0' NOT NULL,`c` CHAR(120) DEFAULT _UTF8MB4'' NOT NULL,`pad` CHAR(60) DEFAULT _UTF8MB4'' NOT NULL,PRIMARY KEY(`id`)) ENGINE = innodb","sqlType":null,"mysqlType":null,"data":null,"old":null}
+...
+```
+##### Parse
+| baseOffset | lastOffset | count | position | CreatedTime   | size | Messages |
+| ---------- | ---------- | ----- | -------- | ------------- | ---- | -------- |
+| 0          | 0          | 1     | 0        | 1652109690071 | 473  | Message1 |
+
+###### Message1
+| offset | CreatedTime   | payload    |
+| ------ | ------------- | ---------- |
+| 0      | 1652109690071 | Canal-Json |
+
+---
+
+# Data Offset Index
+
+##### Command
+```c
+kafka-run-class.sh kafka.tools.DumpLogSegments --deep-iteration --print-data-log --files /kafka/kafka-logs-a3a9cc22d5ef/ticdc-test-0/00000000000000000000.index
+```
