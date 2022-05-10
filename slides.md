@@ -421,3 +421,14 @@ end
 note over of Partition : Data structure that represents a topic partition
 @enduml
 ```
+
+---
+layout: center
+---
+# Consumer
+
+<br/>
+<br/>
+<br/>
+
+I don't get it either! 🤷‍♂️
