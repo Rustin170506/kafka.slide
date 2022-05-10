@@ -329,3 +329,60 @@ endif
 ---
 
 # Replication
+
+<div class="replication">
+<div class="chart">
+
+```plantuml {scale: 0.9}
+@startuml
+
+[Producer1]
+
+package "Kafka Cluster" {
+  node "Broker1" {
+    [topic1/part1] as b1t1p1 #Yellow
+  } 
+  node "Broker2" {
+    [topic1/part1] as b2t1p1 #Green
+  } 
+  node "Broker3" {
+    [topic1/part1] as b3t1p1 #Green
+  }
+  node "Broker4" {
+    [topic1/part1] as b4t1p1 #Green
+  } 
+  node "Broker5" {
+    [topic1/part1] as b5t1p1 #Green
+  } 
+}
+
+[Producer1] --> b1t1p1
+b1t1p1      --> b2t1p1
+b1t1p1      --> b3t1p1
+b1t1p1      --> b4t1p1
+b1t1p1      --> b5t1p1
+
+@enduml
+```
+</div>
+
+<div v-click >
+
+- AR: Assigned Replicas
+- ISR: In Sync Replicas
+- OSR: Out-of-Sync Replied
+
+</div>
+</div>
+
+<style>
+.replication {
+  display: flex;
+  justify-content:space-between;
+  align-items: center;
+}
+
+.chart {
+  width: 600px;
+}
+</style>
