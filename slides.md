@@ -28,7 +28,11 @@ layout: center
 
 # Kafka is a Distributed Messaging System
 #### Requirements
-#### Architecture And Design
+#### Architecture
+#### Log Format
+#### Producer
+#### Replication
+#### Consumer
 
 <br/>
 
@@ -159,8 +163,7 @@ h1 {
 
 ---
 
-# Design
-## Kafka Log
+# Log format
 
 ```shell
 # Topic ticdc-test-0
@@ -197,7 +200,6 @@ baseOffset: 0 lastOffset: 0 count: 1 baseSequence: 0 lastSequence: 0 producerId:
 | offset: 0 isValid: true crc: null keySize: -1 valueSize: 403 CreateTime: 1652109690071 baseOffset: 0 lastOffset: 0 baseSequence: 0 lastSequence: 0 producerEpoch: -1 partitionLeaderEpoch: 0 batchSize: 473 magic: 2 compressType: NONE position: 0 sequence: 0 headerKeys: [] payload: {"id":0,"database":"test","table":"sbtest5","pkNames":null,"isDdl":true,"type":"CREATE","es":1652109688508,"ts":1652109690071,"sql":"CREATE TABLE `sbtest5` (`id` INT NOT NULL AUTO_INCREMENT,`k` INT DEFAULT _UTF8MB4'0' NOT NULL,`c` CHAR(120) DEFAULT _UTF8MB4'' NOT NULL,`pad` CHAR(60) DEFAULT _UTF8MB4'' NOT NULL,PRIMARY KEY(`id`)) ENGINE = innodb","sqlType":null,"mysqlType":null,"data":null,"old":null}
 ...
 ```
-##### Parse
 | baseOffset | lastOffset | count | position | CreatedTime   | size | Messages |
 | ---------- | ---------- | ----- | -------- | ------------- | ---- | -------- |
 | 0          | 0          | 1     | 0        | 1652109690071 | 473  | Message1 |
@@ -215,3 +217,91 @@ baseOffset: 0 lastOffset: 0 count: 1 baseSequence: 0 lastSequence: 0 producerId:
 ```c
 kafka-run-class.sh kafka.tools.DumpLogSegments --deep-iteration --print-data-log --files /kafka/kafka-logs-a3a9cc22d5ef/ticdc-test-0/00000000000000000000.index
 ```
+
+##### Index
+```shell
+Dumping /kafka/kafka-logs-26d87e0ee78c/ticdc-test-0/00000000000000000000.index
+offset: 1 position: 473
+offset: 2 position: 946
+```
+
+| offset | position |
+| ------ | -------- |
+| 1      | 473      |
+| 2      | 946      |
+
+---
+
+# Data Timestamp Index
+##### Command
+```c
+kafka-run-class.sh kafka.tools.DumpLogSegments --deep-iteration --print-data-log --files /kafka/kafka-logs-a3a9cc22d5ef/ticdc-test-0/00000000000000000000.timeindex
+```
+##### Index
+```shell
+Dumping /kafka/kafka-logs-26d87e0ee78c/ticdc-test-0/00000000000000000000.timeindex
+timestamp: 1652110714527 offset: 1
+timestamp: 1652110717557 offset: 2
+```
+| timestamp     | offset |
+| ------------- | ------ |
+| 1652110714527 | 1      |
+| 1652110717557 | 2      |
+
+
+- Messages with **1652110714527** <= created time < **1652110717557**, have 1 ( = 0 + 1) <= offset < 2 ( = 0 + 2)
+- Messages with created time >= **1652110717557**, have their offset >= 2 ( = 0 + 2)
+
+---
+
+# Producer(sarama)
+
+<br/>
+<br/>
+<br/>
+
+```plantuml
+@startuml
+AsyncProducer -> Dispatcher : Push msg to Dispatcher
+Dispatcher -> TopicProducer : Dispatch it to TopicProducer \nby topic name
+TopicProducer -> PartitionProducer : Dispatch it to PartitionProducer \nby partition number
+PartitionProducer -> BrokerProducer : Get leader broker producer by metadata, \ndispatch it to BrokerProducer
+BrokerProducer -> Broker : Produce the msg to Kafka Broker
+BrokerProducer <-- Broker : Ack
+AsyncProducer <-- BrokerProducer : Push success msg to successes chan 
+@enduml
+```
+
+---
+
+# How do producers discover and connect to Broker? (sarama)
+
+<div class="chart">
+
+<div>
+
+```plantuml
+@startuml
+(*) --> "Randomly select a broker"
+
+if "Send metadata request" then
+  -->[success] "Update metadata cache"
+  --> [Ending process] (*)
+else
+  -->[error] "Add it into dead broker list"
+  -left-> "Resurrect dead brokers"
+  --> [Retry] "Randomly select a broker"
+endif
+
+@enduml
+```
+</div>
+
+</div>
+
+<style>
+.chart {
+  display: flex;
+  justify-content: center;
+}
+</style>
