@@ -281,6 +281,7 @@ AsyncProducer <-- BrokerProducer : Push success msg to successes chan
 <div>
 
 ```plantuml
+title backgroundMetadataUpdater
 @startuml
 (*) --> "Randomly select a broker"
 
@@ -305,3 +306,26 @@ endif
   justify-content: center;
 }
 </style>
+
+---
+
+# How do producers choose partitions? (sarama)
+
+## Official
+
+- default
+- round-robin
+
+<br/>
+<br/>
+<br/>
+
+## TiCDC
+- default (table + index)
+- index
+- table
+- ts
+
+---
+
+# Replication
