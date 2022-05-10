@@ -349,10 +349,10 @@ package "Kafka Cluster" {
     [topic1/part1] as b3t1p1 #Green
   }
   node "Broker4" {
-    [topic1/part1] as b4t1p1 #Green
+    [topic1/part1] as b4t1p1 #Red
   } 
   node "Broker5" {
-    [topic1/part1] as b5t1p1 #Green
+    [topic1/part1] as b5t1p1 #Red
   } 
 }
 
@@ -372,6 +372,8 @@ b1t1p1      --> b5t1p1
 - ISR: In Sync Replicas
 - OSR: Out-of-Sync Replied
 
+* request.required.acks + min.insync.replicas = reliability
+
 </div>
 </div>
 
@@ -386,3 +388,36 @@ b1t1p1      --> b5t1p1
   width: 600px;
 }
 </style>
+
+---
+
+# [Replication](https://github.com/apache/kafka/blob/000ba031c3d1135cb0e1fe6438d1e464ff10b6b0/core/src/main/scala/kafka/server/KafkaApis.scala#L656)
+
+```plantuml {scale: 0.9}
+@startuml
+alt Leader append
+Producer -> LeaderApiServer : produce message 
+LeaderApiServer -> LeaderReplicaManager : call appendRecords()
+LeaderReplicaManager -> LeaderReplicaManager : call appendToLocalLog()
+LeaderReplicaManager -> Partition : call appendRecordsToLeader()
+Partition -> LeaderLog : call appendAsLeader()
+LeaderReplicaManager <-- LeaderLog : down
+LeaderReplicaManager -> LeaderReplicaManager : Delayed waiting checkEnoughReplicasReachOffset
+Producer <-- LeaderReplicaManager : ACK
+end
+
+alt Follower fetch
+Broker1ReplicaFetcher -> LeaderApiServer : call processFetchRequest()
+LeaderApiServer -> LeaderReplicaManager: call fetchMessages()
+LeaderReplicaManager -> LeaderReplicaManager : call readFromLocalLog()
+LeaderReplicaManager -> Partition : call readRecords()
+Partition -> LocalLog : call read()
+LeaderReplicaManager <-- LocalLog : done
+LeaderReplicaManager -> LeaderReplicaManager : call updateFollowerFetchState()
+LeaderReplicaManager -> Broker1ReplicaFetcher : Response with data
+Broker1ReplicaFetcher -> Broker1ReplicaFetcher: call processPartitionData() and update replica info
+end
+
+note over of Partition : Data structure that represents a topic partition
+@enduml
+```
