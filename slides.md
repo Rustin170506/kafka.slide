@@ -420,14 +420,14 @@ b1t1p1      --> b5t1p1
 
 # [Replication](https://github.com/apache/kafka/blob/000ba031c3d1135cb0e1fe6438d1e464ff10b6b0/core/src/main/scala/kafka/server/KafkaApis.scala#L656)
 
-```plantuml {scale: 0.9}
+```plantuml
 @startuml
 alt Leader append
 Producer -> LeaderApiServer : produce message 
 LeaderApiServer -> LeaderReplicaManager : call appendRecords()
 LeaderReplicaManager -> LeaderReplicaManager : call appendToLocalLog()
-LeaderReplicaManager -> Partition : call appendRecordsToLeader()
-Partition -> LeaderLog : call appendAsLeader()
+LeaderReplicaManager -> LeaderPartition : call appendRecordsToLeader()
+LeaderPartition -> LeaderLog : call appendAsLeader()
 LeaderReplicaManager <-- LeaderLog : done
 LeaderReplicaManager -> LeaderReplicaManager : Delayed waiting checkEnoughReplicasReachOffset
 Producer <-- LeaderReplicaManager : ACK
@@ -437,15 +437,15 @@ alt Follower fetch
 Broker1ReplicaFetcher -> LeaderApiServer : call processFetchRequest()
 LeaderApiServer -> LeaderReplicaManager: call fetchMessages()
 LeaderReplicaManager -> LeaderReplicaManager : call readFromLocalLog()
-LeaderReplicaManager -> Partition : call readRecords()
-Partition -> LocalLog : call read()
-LeaderReplicaManager <-- LocalLog : done
+LeaderReplicaManager -> Broker1Partition : call readRecords()
+Broker1Partition -> Broker1LocalLog : call read()
+LeaderReplicaManager <-- Broker1LocalLog : done
 LeaderReplicaManager -> LeaderReplicaManager : call updateFollowerFetchState()
 LeaderReplicaManager -> Broker1ReplicaFetcher : Response with data
 Broker1ReplicaFetcher -> Broker1ReplicaFetcher: call processPartitionData() and update replica info
 end
 
-note over of Partition : Data structure that represents a topic partition
+note over of LeaderPartition : Data structure that represents a topic partition
 @enduml
 ```
 
@@ -550,9 +550,21 @@ We can't stop the message from retrying!
 - [Kafka: The Definitive Guide](https://www.confluent.io/resources/kafka-the-definitive-guide/)
 - [Kafka Source Code](https://github.com/apache/kafka)
 - [Sarama Source Code](https://github.com/Shopify/sarama)
+- [Sarama wiki](https://github.com/Shopify/sarama/wiki)
+- [Complex Concurrency Patterns with Go](https://www.youtube.com/watch?v=2HOO5gIgyMg&t=1080s)
 - [Cockroach Source Code](https://github.com/cockroachdb/cockroach)
 - [rohithsankepally Blog](https://rohithsankepally.github.io/Kafka-Storage-Internals/)
 - [Is Kafka a Database?](https://www.youtube.com/watch?v=BuE6JvQE_CY)
+
+---
+layout: center
+---
+
+# Useful Tools
+
+- [Kafka Bin tools](https://github.com/apache/kafka/tree/trunk/bin)
+- [Kcat](https://github.com/edenhill/kcat)
+- [Kafka Playground](https://github.com/vdesabou/kafka-docker-playground)
 
 ---
 layout: center
