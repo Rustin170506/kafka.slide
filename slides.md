@@ -39,6 +39,7 @@ layout: center
 # TiCDC Writes To Kafka
 #### max.message.bytes
 #### min.insync.replicas
+#### [Issue 4241](https://github.com/pingcap/tiflow/issues/4241)
 
 --- 
 
@@ -432,3 +433,16 @@ layout: center
 <br/>
 
 I don't get it either! 🤷‍♂️
+
+---
+
+# max.message.bytes
+
+- [Issue 3081](https://github.com/pingcap/tiflow/issues/3081)
+- [Issue 3337](https://github.com/pingcap/tiflow/issues/3337)
+<br/>
+<br/>
+- [Batch Size Limits in TiCDC](https://github.com/pingcap/tiflow/blob/544aadb0fb61e7cae6a1e052c78ed37bb3fb2694/cdc/sink/codec/json.go#L454)
+- Producer's [MaxMessageBytes](https://github.com/Shopify/sarama/blob/0fe5d534ef6247cf4492a6f2233ef248891a2204/config.go#L166)
+- Broker's [message.max.bytes](https://kafka.apache.org/documentation/#brokerconfigs_message.max.bytes)
+- Topic's [max.message.bytes](https://kafka.apache.org/documentation/#topicconfigs_max.message.bytes)
