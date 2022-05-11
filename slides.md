@@ -499,13 +499,34 @@ We can't stop the message from retrying!
 # Missing
 <br/>
 <br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+<div class="missing">
+<div>
 
 ### Kafka Controller
 <br/>
 <br/>
+</div>
+
+<div>
 
 ### Kafka Consumer
 
+</div>
+</div>
+
+<style>
+.missing {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+</style>
 ---
 
 # Refs
