@@ -39,6 +39,7 @@ layout: center
 # TiCDC Writes To Kafka
 #### max.message.bytes
 #### min.insync.replicas
+#### auto.create.topics.enable
 #### [Issue 4241](https://github.com/pingcap/tiflow/issues/4241)
 
 --- 
@@ -460,3 +461,36 @@ I don't get it either! 🤷‍♂️
   - WaitForLocal RequiredAcks = 1
   - WaitForAll RequiredAcks = -1
 - Broker's [min.insync.replicas](https://kafka.apache.org/documentation/#topicconfigs_min.insync.replicas)
+
+---
+
+# auto.create.topics.enable
+- There are some jobs and mistakes we can circumvent from the product design
+<br/>
+<br/>
+- Broker's [auto.create.topics.enable](https://kafka.apache.org/documentation/#brokerconfigs_auto.create.topics.enable)
+- [The strategy used by cockroach](https://www.cockroachlabs.com/docs/v20.1/change-data-capture.html#create-a-changefeed-connected-to-kafka)
+
+---
+
+# [Issue 4241](https://github.com/pingcap/tiflow/issues/4241)
+
+<br/>
+<br/>
+
+> sarama, which is by far the most popular but is quite difficult to work with. It is poorly documented, the API exposes low level concepts of the Kafka protocol, and it doesn't support recent Go features like contexts. It also passes all values as pointers which causes large numbers of dynamic memory allocations, more frequent garbage collections, and higher memory usage.
+> 
+> 
+>                                                                                  -- segmentio/kafka-go
+
+<br/>
+<br/>
+<br/>
+We can't stop the message from retrying!
+
+<br/>
+<br/>
+
+[A workaround](https://github.com/pingcap/tiflow/pull/5186)
+
+
