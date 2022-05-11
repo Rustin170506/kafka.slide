@@ -373,7 +373,7 @@ b1t1p1      --> b5t1p1
 - ISR: In Sync Replicas
 - OSR: Out-of-Sync Replied
 
-* request.required.acks + min.insync.replicas = reliability
+* request.required.acks + min.insync.replicas = durability
 
 </div>
 </div>
@@ -446,3 +446,17 @@ I don't get it either! 🤷‍♂️
 - Producer's [MaxMessageBytes](https://github.com/Shopify/sarama/blob/0fe5d534ef6247cf4492a6f2233ef248891a2204/config.go#L166)
 - Broker's [message.max.bytes](https://kafka.apache.org/documentation/#brokerconfigs_message.max.bytes)
 - Topic's [max.message.bytes](https://kafka.apache.org/documentation/#topicconfigs_max.message.bytes)
+
+---
+
+# min.insync.replicas
+
+- [Issue 3994](https://github.com/pingcap/tiflow/issues/3994)
+<br/>
+<br/>
+- TiCDC Replication factor for creating topics
+- Producer's [RequiredAcks](https://github.com/Shopify/sarama/blob/0fe5d534ef6247cf4492a6f2233ef248891a2204/config.go#L170)
+  - NoResponse RequiredAcks = 0
+  - WaitForLocal RequiredAcks = 1
+  - WaitForAll RequiredAcks = -1
+- Broker's [min.insync.replicas](https://kafka.apache.org/documentation/#topicconfigs_min.insync.replicas)
