@@ -402,7 +402,7 @@ LeaderApiServer -> LeaderReplicaManager : call appendRecords()
 LeaderReplicaManager -> LeaderReplicaManager : call appendToLocalLog()
 LeaderReplicaManager -> Partition : call appendRecordsToLeader()
 Partition -> LeaderLog : call appendAsLeader()
-LeaderReplicaManager <-- LeaderLog : down
+LeaderReplicaManager <-- LeaderLog : done
 LeaderReplicaManager -> LeaderReplicaManager : Delayed waiting checkEnoughReplicasReachOffset
 Producer <-- LeaderReplicaManager : ACK
 end
