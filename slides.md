@@ -397,7 +397,7 @@ b1t1p1      --> b5t1p1
 
 - AR: Assigned Replicas
 - ISR: In Sync Replicas
-- OSR: Out-of-Sync Replied
+- OSR: Out-of-Sync Replied(replica.lag.time.max.ms + replica.lag.max.messages)
 
 * request.required.acks + min.insync.replicas = durability
 
