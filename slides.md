@@ -496,6 +496,18 @@ We can't stop the message from retrying!
 
 ---
 
+# Missing
+<br/>
+<br/>
+
+### Kafka Controller
+<br/>
+<br/>
+
+### Kafka Consumer
+
+---
+
 # Refs
 
 <br/>
@@ -508,3 +520,9 @@ We can't stop the message from retrying!
 - [Cockroach Source Code](https://github.com/cockroachdb/cockroach)
 - [rohithsankepally Blog](https://rohithsankepally.github.io/Kafka-Storage-Internals/)
 - [Is Kafka a Database?](https://www.youtube.com/watch?v=BuE6JvQE_CY)
+
+---
+layout: center
+---
+
+# Thanks!
