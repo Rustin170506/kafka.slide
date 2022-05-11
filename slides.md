@@ -190,6 +190,8 @@ h1 {
 
 ```shell
 # Topic ticdc-test-0
+# log.segment.bytes = 2048
+# log.index.interval.bytes = 128
 .
 ├── 00000000000000000000.index # Data offset index
 ├── 00000000000000000000.log # Data log
