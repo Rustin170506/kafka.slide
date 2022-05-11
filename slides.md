@@ -420,7 +420,7 @@ b1t1p1      --> b5t1p1
 
 # [Replication](https://github.com/apache/kafka/blob/000ba031c3d1135cb0e1fe6438d1e464ff10b6b0/core/src/main/scala/kafka/server/KafkaApis.scala#L656)
 
-```plantuml
+```plantuml {scale: 0.9}
 @startuml
 alt Leader append
 Producer -> LeaderApiServer : produce message 
@@ -437,9 +437,9 @@ alt Follower fetch
 Broker1ReplicaFetcher -> LeaderApiServer : call processFetchRequest()
 LeaderApiServer -> LeaderReplicaManager: call fetchMessages()
 LeaderReplicaManager -> LeaderReplicaManager : call readFromLocalLog()
-LeaderReplicaManager -> Broker1Partition : call readRecords()
-Broker1Partition -> Broker1LocalLog : call read()
-LeaderReplicaManager <-- Broker1LocalLog : done
+LeaderReplicaManager -> LeaderPartition : call readRecords()
+LeaderPartition -> LeaderLog : call read()
+LeaderReplicaManager <-- LeaderLog : done
 LeaderReplicaManager -> LeaderReplicaManager : call updateFollowerFetchState()
 LeaderReplicaManager -> Broker1ReplicaFetcher : Response with data
 Broker1ReplicaFetcher -> Broker1ReplicaFetcher: call processPartitionData() and update replica info
