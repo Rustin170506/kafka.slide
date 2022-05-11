@@ -1,6 +1,7 @@
 ---
 theme: seriph
 background: https://kafka.apache.org/images/streams-and-tables-p1_p4.png
+download: true
 class: 'text-center'
 highlighter: shiki
 lineNumbers: false
@@ -44,9 +45,10 @@ layout: center
 --- 
 
 # Messaging System Requirements
-<br/>  
-<br/>  
 
+<div class="req">
+
+<div>
 
 ## Log Collection
 ### User activity events
@@ -60,6 +62,26 @@ layout: center
 
 ## Streaming processing
 ### Kafka streams
+</div>
+
+<div class="kafka">
+
+![Kafka](https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Kafka.jpg/984px-Kafka.jpg?20201008123232)
+
+</div>
+
+</div>
+
+<style>
+.req {
+  display: flex;
+  justify-content: space-around;
+}
+.kafka {
+  width: 300px;
+  height: 500px;
+}
+</style>
 
 ---
 
@@ -490,7 +512,6 @@ We can't stop the message from retrying!
 <br/>
 <br/>
 <br/>
-<br/>
 
 <div class="missing">
 <div>
@@ -511,7 +532,6 @@ We can't stop the message from retrying!
 .missing {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 </style>
