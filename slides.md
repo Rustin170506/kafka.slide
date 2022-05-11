@@ -494,3 +494,17 @@ We can't stop the message from retrying!
 [A workaround](https://github.com/pingcap/tiflow/pull/5186)
 
 
+---
+
+# Refs
+
+<br/>
+<br/>
+
+- [Kafka: a Distributed Messaging System for Log Processing](https://www.microsoft.com/en-us/research/wp-content/uploads/2017/09/Kafka.pdf)
+- [Kafka: The Definitive Guide](https://www.confluent.io/resources/kafka-the-definitive-guide/)
+- [Kafka Source Code](https://github.com/apache/kafka)
+- [Sarama Source Code](https://github.com/Shopify/sarama)
+- [Cockroach Source Code](https://github.com/cockroachdb/cockroach)
+- [rohithsankepally Blog](https://rohithsankepally.github.io/Kafka-Storage-Internals/)
+- [Is Kafka a Database?](https://www.youtube.com/watch?v=BuE6JvQE_CY)
