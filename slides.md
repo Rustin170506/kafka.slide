@@ -75,9 +75,10 @@ layout: center
 <style>
 .req {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-start;
 }
 .kafka {
+  margin-left: 180px;
   width: 300px;
   height: 500px;
 }
@@ -291,6 +292,7 @@ AsyncProducer -> Dispatcher : Push msg to Dispatcher
 Dispatcher -> TopicProducer : Dispatch it to TopicProducer \nby topic name
 TopicProducer -> PartitionProducer : Dispatch it to PartitionProducer \nby partition number
 PartitionProducer -> BrokerProducer : Get leader broker producer by metadata, \ndispatch it to BrokerProducer
+BrokerProducer -> BrokerProducer : Timeout or ready to flush
 BrokerProducer -> Broker : Produce the msg to Kafka Broker
 BrokerProducer <-- Broker : Ack
 AsyncProducer <-- BrokerProducer : Push success msg to successes chan 
