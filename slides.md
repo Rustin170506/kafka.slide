@@ -15,7 +15,7 @@ drawings:
 
 # Kafka: a Distributed Messaging System
 
-[hi-rustin](https://github.com/hi-rustin)
+[Rustin170506](https://github.com/Rustin170506)
 
 <div class="pt-12">
   <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
@@ -42,7 +42,7 @@ layout: center
 #### auto.create.topics.enable
 #### [Issue 4241](https://github.com/pingcap/tiflow/issues/4241)
 
---- 
+---
 
 # Messaging System Requirements
 
@@ -53,11 +53,11 @@ layout: center
 ## Log Collection
 ### User activity events
 ### Operational metrics
-<br/>  
+<br/>
 
 ## Message Queue
 ### 11.11
-<br/>  
+<br/>
 
 
 ## Streaming processing
@@ -111,17 +111,17 @@ package "Kafka Cluster" {
     [topic1/part1] as b1t1p1 #Yellow
     [topic1/part2] as b1t1p2 #Green
     [topic2/part1] as b1t2p1 #Green
-  } 
+  }
   node "Broker2" {
     [topic1/part1] as b2t1p1 #Green
     [topic1/part2] as b2t1p2 #Yellow
     [topic2/part1] as b2t2p1 #Green
-  } 
+  }
   node "Broker3" {
     [topic1/part1] as b3t1p1 #Green
     [topic1/part2] as b3t1p2 #Green
     [topic2/part1] as b3t2p1 #Yellow
-  } 
+  }
 }
 
 together {
@@ -133,7 +133,7 @@ together {
   package "Consumer Group2" as Group2 {
     [Consumer3]
     [Consumer4]
-  } 
+  }
 }
 
 
@@ -295,7 +295,7 @@ PartitionProducer -> BrokerProducer : Get leader broker producer by metadata, \n
 BrokerProducer -> BrokerProducer : Timeout or ready to flush
 BrokerProducer -> Broker : Produce the msg to Kafka Broker
 BrokerProducer <-- Broker : Ack
-AsyncProducer <-- BrokerProducer : Push success msg to successes chan 
+AsyncProducer <-- BrokerProducer : Push success msg to successes chan
 @enduml
 ```
 
@@ -368,19 +368,19 @@ endif
 package "Kafka Cluster" {
   node "Broker1" {
     [topic1/part1] as b1t1p1 #Yellow
-  } 
+  }
   node "Broker2" {
     [topic1/part1] as b2t1p1 #Green
-  } 
+  }
   node "Broker3" {
     [topic1/part1] as b3t1p1 #Green
   }
   node "Broker4" {
     [topic1/part1] as b4t1p1 #Red
-  } 
+  }
   node "Broker5" {
     [topic1/part1] as b5t1p1 #Red
-  } 
+  }
 }
 
 [Producer1] --> b1t1p1
@@ -423,7 +423,7 @@ b1t1p1      --> b5t1p1
 ```plantuml {scale: 0.9}
 @startuml
 alt Leader append
-Producer -> LeaderApiServer : produce message 
+Producer -> LeaderApiServer : produce message
 LeaderApiServer -> LeaderReplicaManager : call appendRecords()
 LeaderReplicaManager -> LeaderReplicaManager : call appendToLocalLog()
 LeaderReplicaManager -> LeaderPartition : call appendRecordsToLeader()
@@ -493,8 +493,8 @@ note over of LeaderPartition : Data structure that represents a topic partition
 <br/>
 
 > sarama, which is by far the most popular but is quite difficult to work with. It is poorly documented, the API exposes low level concepts of the Kafka protocol, and it doesn't support recent Go features like contexts. It also passes all values as pointers which causes large numbers of dynamic memory allocations, more frequent garbage collections, and higher memory usage.
-> 
-> 
+>
+>
 >                                                                                  -- segmentio/kafka-go
 
 <br/>
