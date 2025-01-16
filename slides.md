@@ -1,7 +1,6 @@
 ---
 theme: seriph
 background: https://kafka.apache.org/images/streams-and-tables-p1_p4.png
-download: true
 class: 'text-center'
 highlighter: shiki
 lineNumbers: false
